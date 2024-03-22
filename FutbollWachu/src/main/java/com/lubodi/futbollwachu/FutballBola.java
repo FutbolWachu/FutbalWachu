@@ -6,7 +6,9 @@ package com.lubodi.futbollwachu;
 import com.lubodi.futbollwachu.BolaFisicasYMetodos.Fisicas;
 
 import com.lubodi.futbollwachu.BolaFisicasYMetodos.Metodos;
+import com.lubodi.futbollwachu.Commands.AdminArenaTab;
 import com.lubodi.futbollwachu.Commands.ArenaCommand;
+import com.lubodi.futbollwachu.Commands.AdminArenaCommand;
 import com.lubodi.futbollwachu.HabilidadesFutbol.Commands.ComandoFutbol;
 import com.lubodi.futbollwachu.HabilidadesFutbol.GUI.HabilidadGUI;
 import com.lubodi.futbollwachu.HabilidadesFutbol.Interfaces.HabilidadesManager;
@@ -19,12 +21,16 @@ import com.lubodi.futbollwachu.Manager.ArenaManager;
 import com.lubodi.futbollwachu.Manager.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+
 public final class FutballBola extends JavaPlugin {
     private static FutballBola instance;
     private Fisicas fisicas;
     private Metodos metodos;
     private ArenaManager arenaManager;
     private MecanicasSaque mecanicasSaque;
+    // A map containing arenas, that are being set up <String arenaName, Integer arenaID>
+    private HashMap<String, Integer> setupArenas = new HashMap<>();
 
 
 
@@ -39,7 +45,7 @@ public final class FutballBola extends JavaPlugin {
     public void onEnable() {
 
 
-        ConfigManager.setupConfig(this);
+        ConfigManager.setupConfig(this, this);
 
         fisicas = new Fisicas();
         arenaManager = new ArenaManager(this);
@@ -50,6 +56,8 @@ public final class FutballBola extends JavaPlugin {
         // No need to create instances here, as they are injected through the constructor
         getServer().getPluginManager().registerEvents(new Metodos(this, getFisicas()), this);
         getCommand("futbol").setExecutor(new ComandoFutbol(this, metodos));
+        getCommand("adminArena").setExecutor(new AdminArenaCommand(this));
+        getCommand("adminArena").setTabCompleter(new AdminArenaTab(this));
 
         // Register events.
         getServer().getPluginManager().registerEvents(new ConnectListener(this), this);
@@ -76,4 +84,11 @@ public final class FutballBola extends JavaPlugin {
         return getInstance().mecanicasSaque;
     }
 
+    public void setArenaManager(ArenaManager arenaManager) {
+        this.arenaManager = arenaManager;
+    }
+
+    public HashMap<String, Integer> getSetupArenas() {
+        return setupArenas;
+    }
 }

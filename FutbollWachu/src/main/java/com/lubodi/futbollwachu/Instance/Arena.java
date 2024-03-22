@@ -66,6 +66,11 @@ public class Arena {
     private int id;
 
     /**
+     * Nom de la arena.
+     */
+    private String name;
+
+    /**
      * Mapa concurrente que almacena las canchas de cada equipo.
      */
     private ConcurrentHashMap<Team, Region> canchas;
@@ -161,8 +166,9 @@ public class Arena {
 
          */
 
-    public Arena(FutballBola minigame, int id,ConcurrentHashMap<Team, Region> portero, ConcurrentHashMap<Team, Region> canchas, Location ballSpawn, Location spawn, ConcurrentHashMap<Team, Region> zones) {
+    public Arena(FutballBola minigame, int id, String name,ConcurrentHashMap<Team, Region> portero, ConcurrentHashMap<Team, Region> canchas, Location ballSpawn, Location spawn, ConcurrentHashMap<Team, Region> zones) {
         this.id = id;
+        this.name = name;
         this.metodos = new Metodos(minigame, minigame.getFisicas());
         this.minigame = minigame;
         this.portero = portero;
@@ -736,6 +742,10 @@ public class Arena {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Region getRegionCancha(Team team) {

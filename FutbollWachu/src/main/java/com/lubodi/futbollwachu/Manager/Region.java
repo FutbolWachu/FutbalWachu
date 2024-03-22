@@ -80,7 +80,39 @@ public class Region {
         return new double[][] {{distanceToCorner1X, distanceToCorner1Y, distanceToCorner1Z}, {distanceToCorner2X, distanceToCorner2Y, distanceToCorner2Z}};
     }
 
+    /**
+        Uses math to split the current region in half.
+        It always splits the long side, so if x would be 30 blocks and z be 10 blocks long.
+        After splitting x will be 15 blocks long
+        @return returns two new regions as an array
+     */
+    public Region[] splitInHalf() {
+        double lengthX = Math.abs(corner1.getX() - corner2.getX());
+        double lengthZ = Math.abs(corner1.getZ() - corner2.getZ());
 
+        boolean splitAlongX = lengthX > lengthZ;
+
+        Location newCorner1, newCorner2;
+
+        if (splitAlongX) {
+            newCorner1 = new Location(corner1.getWorld(), (corner1.getX() + corner2.getX()) / 2, corner2.getY(), corner2.getZ());
+            newCorner2 = new Location(corner1.getWorld(), (corner1.getX() + corner2.getX()) / 2, corner1.getY(), corner1.getZ());
+        } else {
+            newCorner1 = new Location(corner1.getWorld(), corner2.getX(), corner2.getY(), (corner1.getZ() + corner2.getZ()) / 2);
+            newCorner2 = new Location(corner1.getWorld(), corner1.getX(), corner1.getY(), (corner1.getZ() + corner2.getZ()) / 2);
+        }
+
+        return new Region[]{new Region(corner1, newCorner1), new Region(corner2, newCorner2)};
+    }
+
+    public Location getMiddle() {
+        double x, y, z;
+        x = (corner1.getX() + corner2.getX()) / 2;
+        y = (corner1.getY() + corner2.getY()) / 2;
+        z = (corner1.getZ() + corner2.getZ()) / 2;
+
+        return new Location(corner1.getWorld(), x, y, z);
+    }
 
 
 

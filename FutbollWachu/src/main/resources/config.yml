@@ -12,6 +12,7 @@ lobby-spawn:
   pitch: 0
 arenas:
   0:
+    name: 'default'
     world: 'world'
     teams:
       RED:
